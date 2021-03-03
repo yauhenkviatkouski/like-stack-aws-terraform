@@ -1,0 +1,14 @@
+{
+  "DATABASE": {
+    "MONGO_URL": "mongodb+srv://admin:lvFAHYXznoGV0w8G@cluster0.knmwy.mongodb.net/Cluster0?retryWrites=true&w=majority"
+  },
+  "HEADERS": {
+    "Access-Control-Allow-Origin": "http://like-stack-client.s3-website-eu-west-1.amazonaws.com",
+    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
+    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization, Content-Length, X-Requested-With"
+  },
+  "bcrypt": 10,
+  "SECRET_JWT": "super_secret_jwt",
+  "APOLLO_KEY": "service:likeStack:vgxasPZev-dBOQ7OFsm5RA"
+}

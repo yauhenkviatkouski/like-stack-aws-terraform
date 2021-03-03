@@ -1,0 +1,30 @@
+
+  #app {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+  }
+  main {
+    height: 100%;
+    flex: 1;
+    padding: 16px;
+  }
+  h2 {
+    margin-left: 45px
+  }
+  .nav {
+    margin-bottom: 15px;
+  }
+  p {
+    white-space: pre-line;
+  }
+  footer {
+    margin: 0 auto;
+  }
+
+  button {
+    margin: 5px 20px;
+  }

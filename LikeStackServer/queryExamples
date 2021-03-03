@@ -1,0 +1,115 @@
+
+all nesting is allowed
+
+query getQns {
+  questions(skip: 0, limit: 2) {
+  	author {
+      name
+      answers {
+        question {
+          author {
+            questions {
+              answers {
+                author {
+                  questions {
+                    author {
+                      id
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+query getQuestionsByHeader($header:String) {
+  questions(header:$header) {
+  	header
+    id
+  }   
+}
+
+variables:
+{
+  "header":"derQuestion"
+}
+
+
+
+
+query getQuestionById($id:ID!) {
+  question(id:$id) {
+		body
+    lastActivityDate
+    tags
+    header
+    answers {
+      id
+      body
+      isAccepted
+      author {
+        name
+      }
+    }
+    
+    author{
+      id
+      name
+    }
+    
+  }
+}
+
+variables:
+{
+  "id":"5f57669bbab08a31d4798d4a"
+}
+
+
+
+mutation signUp($user: createUserInput) {
+  signUp(user: $user) {
+    name
+  }
+}
+
+variables:
+{
+  "user": {
+    "name": "peter",
+    "surname": "peterev",
+    "email": "33@11.com",
+    "password": "123456"
+  }
+}
+
+
+mutation signIn {
+  signIn(email: "33@11.com", password: "123456") {
+    id
+    name
+  }
+}
+
+
+mutation CreateQ($question: createQuestionInput) {
+  createQuestion(question: $question) {
+    id
+  }
+}
+
+variables:
+{
+  "question": {
+    "header": "NEWQUESTION123",
+    "body": "bodyQuestion",
+    "tags": ["tag 1", "tag 2"],
+    "author": "5f577a2f453d5d3e90c8540e"
+	}
+}

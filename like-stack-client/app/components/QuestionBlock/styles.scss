@@ -1,0 +1,28 @@
+
+  .question-card {
+    margin: 25px 0;
+
+    &__tags {
+      padding: 0;
+    }
+
+    &__tag {
+      display: inline-block;
+    padding: 0 4px;
+    margin: 2px;
+    border-radius: calc(.25rem - 1px);
+    border: gray solid 1px;
+    }
+
+    &__last-activity {
+      float: right;
+    }
+
+    &_short {
+      .card-text{
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
+  }

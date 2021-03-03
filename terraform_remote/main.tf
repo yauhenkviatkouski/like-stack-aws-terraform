@@ -1,0 +1,13 @@
+provider "aws" {
+  region  = "eu-west-1"
+  access_key = "AKIAZ7QHKGC2KGQ63INL"
+  secret_key = "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"
+}
+
+# module "project" {
+#   source = "../"
+# }
+
+module "lamda_and_sqs" {
+  source = "../notification-service"
+}
