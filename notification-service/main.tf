@@ -57,8 +57,8 @@ resource "aws_iam_role_policy" "lambda_subscriber_dynamo_policy" {
 EOF
 }
 
-resource "aws_iam_role_policy" "lambda_subscriber_sqs_policy" {
-    name = "lambda_subscriber_sqs_policy"
+resource "aws_iam_role_policy" "lambdas_policy" {
+    name = "lambdas_policy"
     role = aws_iam_role.lambda_role.id
     policy = <<EOF
 {
@@ -134,10 +134,41 @@ resource "aws_sqs_queue_policy" "subscribers_queue_policy" {
 POLICY
 }
 
+resource "aws_lambda_function" "lambda_notifyer" {
+
+  function_name = "lambda_notifyer"
+  filename         = "${path.module}/lambdas/lambda-notifyer.zip"
+  role          = aws_iam_role.lambda_role.arn
+  handler       = "lambda-notifyer.handler"
+  source_code_hash = data.archive_file.lambda_notifyer_zip.output_base64sha256
+  runtime       = "nodejs12.x"
+}
+
+resource "aws_sns_topic" "question_updates" {
+  name = "question-updates-topic"
+}
+
+resource "aws_sns_topic_subscription" "question_updates_topic_subscription" {
+    topic_arn = aws_sns_topic.question_updates.arn
+    protocol  = "lambda"
+    endpoint  = aws_lambda_function.lambda_notifyer.arn
+}
+
+resource "aws_lambda_permission" "allow_sns_invoke" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda_notifyer.function_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.question_updates.arn
+}
+
 output "subscribers_queue_url" {
   value = aws_sqs_queue.subscribers_queue.id
 }
 
+output "sns_topic_queue_url" {
+  value = aws_sns_topic_subscription.question_updates_topic_subscription.id
+}
 
 # resource "local_file" "foo" {
 #     content     = "foo!"
