@@ -14,47 +14,75 @@ const dynamo = new AWS.DynamoDB({
   ...localstackMockParameters,
 });
 
-exports.handler = function (event, _, callback) {
-  event.Records.forEach((record) => {
-    const { questionId, subscriber, eventType } = record.messageAttributes;
+exports.handler = async function (event) {
+  console.log(
+    "🚀 ~ file: lambda-subscriber.js ~ line 18 ~ event",
+    JSON.stringify(event)
+  );
+  return await Promise.all(
+    event.Records.map(async (record) => {
+      const snsMessage = JSON.parse(record.body);
+      const {
+        questionId,
+        subscriber,
+        subscriptionType,
+      } = snsMessage.MessageAttributes;
 
-    const TABLE_NAME = "subscribers_db";
-
-    switch (eventType.stringValue) {
-      case "createSubscription":
-        const paramsCreate = {
-          TableName: TABLE_NAME,
-          Item: {
-            questionId: {
-              S: questionId.stringValue,
-            },
-            subscribers: {
-              SS: [subscriber.stringValue],
-            },
-          },
-        };
-        return dynamo.putItem(paramsCreate, callback);
-      case "addSubscriber":
-        const paramsUpdate = {
-          Key: {
-            questionId: {
-              S: questionId.stringValue,
-            },
-          },
-          TableName: TABLE_NAME,
-          ExpressionAttributeNames: {
-            "#subscribers": "subscribers",
-          },
-          ExpressionAttributeValues: {
-            ":subscriberId": {
-              SS: [subscriber.stringValue],
-            },
-          },
-          UpdateExpression: "ADD #subscribers :subscriberId",
-        };
-        return dynamo.updateItem(paramsUpdate, callback);
-      default:
-        return callback(`Unknown operation: ${eventType.stringValue}`);
-    }
-  });
+      try {
+        const TABLE_NAME = "subscribers_db";
+        switch (subscriptionType.Value) {
+          case "createSubscription":
+            const paramsCreate = {
+              TableName: TABLE_NAME,
+              Item: {
+                questionId: {
+                  S: questionId.Value,
+                },
+                subscribers: {
+                  SS: [subscriber.Value],
+                },
+              },
+            };
+            const createResponse = await dynamo.putItem(paramsCreate).promise();
+            console.log(
+              "🚀 ~ file: lambda-subscriber.js ~ line 47 ~ event.Records.map ~ createResponse",
+              createResponse
+            );
+            return createResponse;
+          case "addSubscriber":
+            const paramsUpdate = {
+              Key: {
+                questionId: {
+                  S: questionId.Value,
+                },
+              },
+              TableName: TABLE_NAME,
+              ExpressionAttributeNames: {
+                "#subscribers": "subscribers",
+              },
+              ExpressionAttributeValues: {
+                ":subscriberId": {
+                  SS: [subscriber.Value],
+                },
+              },
+              UpdateExpression: "ADD #subscribers :subscriberId",
+            };
+            const updateResponse = await dynamo
+              .updateItem(paramsUpdate)
+              .promise();
+            console.log(
+              "🚀 ~ file: lambda-subscriber.js ~ line 70 ~ event.Records.map ~ updateResponse",
+              updateResponse
+            );
+            return updateResponse;
+        }
+      } catch (err) {
+        console.log(
+          "🚀 ~ file: lambda-subscriber.js ~ line 73 ~ event.Records.map ~ err",
+          err
+        );
+        return err;
+      }
+    })
+  );
 };
