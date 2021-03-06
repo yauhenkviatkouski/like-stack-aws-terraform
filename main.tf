@@ -9,40 +9,6 @@ terraform {
   }
 }
 
-# module "terraform_remote" {
-#   source = "./terraform_remote"
-# }
-
-# module "terraform_local" {
-#   source = "./terraform_local"
-# }
-
-# provider "aws" {
-#   region  = var.region
-#   access_key = "AKIAZ7QHKGC2KGQ63INL"
-#   secret_key = "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"
-# }
-
-# provider "aws" {
-#   access_key                  = "mock_access_key"
-#   region                      = "eu-west-1"
-#   s3_force_path_style         = true
-#   secret_key                  = "mock_secret_key"
-#   skip_credentials_validation = true
-#   skip_metadata_api_check     = true
-#   skip_requesting_account_id  = true
-
-#   endpoints {
-#     apigateway     = "http://localhost:4566"
-#     cloudwatch     = "http://localhost:4566"
-#     dynamodb       = "http://localhost:4566"
-#     iam            = "http://localhost:4566"
-#     lambda         = "http://localhost:4566"
-#     s3             = "http://localhost:4566"
-#     sns            = "http://localhost:4566"
-#     sqs            = "http://localhost:4566"
-#   }
-# }
 
 resource "aws_sns_topic" "results_updates" {
   name = "results-updates-topic"

@@ -2,6 +2,15 @@
 #    region = "eu-west-1"
 # }
 
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "3.29.0"
+    }
+  }
+}
+
 resource "aws_dynamodb_table" "subscribers_db" {
   name             = "subscribers_db"
   hash_key         = "questionId"
@@ -72,7 +81,10 @@ resource "aws_iam_role_policy" "lambdas_policy" {
         "sqs:ReceiveMessage"
       ],
       "Effect": "Allow",
-      "Resource": "${aws_sqs_queue.subscribers_queue.arn}"
+      "Resource": [
+        "${aws_sqs_queue.subscribers_queue.arn}",
+        "${aws_sqs_queue.notifications_queue.arn}"
+      ]
     },
     {
       "Action": [
@@ -127,6 +139,9 @@ resource "aws_sqs_queue_policy" "subscribers_queue_policy" {
       "Action": "sqs:SendMessage",
       "Resource": "${aws_sqs_queue.subscribers_queue.arn}",
       "Condition": {
+         "ArnEquals": {
+          "aws:SourceArn": "${aws_sns_topic.notifications_service_topic.arn}"
+        }
       }
     }
   ]
@@ -144,22 +159,68 @@ resource "aws_lambda_function" "lambda_notifyer" {
   runtime       = "nodejs12.x"
 }
 
-resource "aws_sns_topic" "question_updates_topic" {
-  name = "question_updates_topic"
+resource "aws_lambda_event_source_mapping" "lambda_notifyer" {
+  event_source_arn = aws_sqs_queue.notifications_queue.arn
+  function_name    = aws_lambda_function.lambda_notifyer.arn
 }
 
-resource "aws_sns_topic_subscription" "question_updates_topic_subscription" {
-    topic_arn = aws_sns_topic.question_updates_topic.arn
-    protocol  = "lambda"
-    endpoint  = aws_lambda_function.lambda_notifyer.arn
+resource "aws_sqs_queue" "notifications_queue" {
+    name = "notifications_queue"
+    visibility_timeout_seconds = 300
+    tags = {
+        Environment = "production"
+    }
 }
 
-resource "aws_lambda_permission" "allow_sns_invoke" {
-  statement_id  = "AllowExecutionFromSNS"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.lambda_notifyer.function_name
-  principal     = "sns.amazonaws.com"
-  source_arn    = aws_sns_topic.question_updates_topic.arn
+resource "aws_sqs_queue_policy" "notifications_queue_policy" {
+    queue_url = aws_sqs_queue.notifications_queue.id
+
+    policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Id": "sqspolicy",
+  "Statement": [
+    {
+      "Sid": "First",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "sqs:SendMessage",
+      "Resource": "${aws_sqs_queue.notifications_queue.arn}",
+      "Condition": {
+         "ArnEquals": {
+          "aws:SourceArn": "${aws_sns_topic.notifications_service_topic.arn}"
+        }
+      }
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_sns_topic" "notifications_service_topic" {
+  name = "notifications_service_topic"
+}
+
+resource "aws_sns_topic_subscription" "subscribe_to_question" {
+    topic_arn = aws_sns_topic.notifications_service_topic.arn
+    protocol  = "sqs"
+    endpoint  = aws_sqs_queue.subscribers_queue.arn
+    filter_policy = <<EOF
+  {
+    "Subject": ["subscribtion_to_question"]
+  }
+  EOF
+}
+
+resource "aws_sns_topic_subscription" "send_notification" {
+    topic_arn = aws_sns_topic.notifications_service_topic.arn
+    protocol  = "sqs"
+    endpoint  = aws_sqs_queue.notifications_queue.arn
+    filter_policy = <<EOF
+  {
+    "Subject": ["send_notification"]
+  }
+  EOF
 }
 
 output "subscribers_queue_url" {
@@ -167,10 +228,15 @@ output "subscribers_queue_url" {
 }
 
 output "sns_topic_queue_url" {
-  value = aws_sns_topic_subscription.question_updates_topic_subscription.id
+  value = aws_sns_topic.notifications_service_topic.id
 }
 
-# resource "local_file" "foo" {
-#     content     = "foo!"
-#     filename = "${path.module}/foo.bar"
-# }
+resource "local_file" "output_variables" {
+    content     =  <<EOF
+  {
+    "notifications_service_topic_url": "${aws_sns_topic.notifications_service_topic.id}"
+  }
+  EOF
+    filename = "${path.module}/output_variables.json"
+}
+
