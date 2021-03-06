@@ -1,0 +1,15 @@
+{
+  "name": "notification-service",
+  "version": "1.0.0",
+  "description": "aws notification service fo lsapp",
+  "main": "n",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "yauhenkviatkouski",
+  "license": "ISC",
+  "devDependencies": {
+    "aws-sdk": "^2.858.0",
+    "mocha": "^8.3.1"
+  }
+}
