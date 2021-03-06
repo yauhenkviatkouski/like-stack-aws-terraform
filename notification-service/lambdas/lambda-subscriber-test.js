@@ -15,7 +15,7 @@ const sqs = new AWS.SQS({
   // secretAccessKey: "mock_secret_key",
 });
 
-const sqs = new AWS.SNS({
+const sns = new AWS.SNS({
   apiVersion: "2010-03-31",
   region: "eu-west-1",
 });
@@ -25,7 +25,7 @@ var params = {
   MessageAttributes: {
     questionId: {
       DataType: "String",
-      StringValue: "33333",
+      StringValue: "11111",
     },
   },
   TopicArn: "STRING_VALUE",
@@ -62,63 +62,6 @@ var params = {
 //   }
 // });
 
-const handler = async (event, context, callback) => {
-  event.Records.forEach(async (record) => {
-    const { questionId, subscriber, eventType } = record.messageAttributes;
-
-    const TABLE_NAME = "subscribers_db";
-
-    switch (eventType.stringValue) {
-      case "createSubscription":
-        const paramsCreate = {
-          TableName: TABLE_NAME,
-          Item: {
-            questionId: {
-              S: questionId.stringValue,
-            },
-            subscribers: {
-              SS: [subscriber.stringValue],
-            },
-          },
-        };
-        return dynamo.putItem(paramsCreate, function (err, data) {
-          if (err) {
-            console.log("Error", err);
-          } else {
-            console.log("Success", data);
-          }
-        });
-      case "addSubscriber":
-        const paramsUpdate = {
-          Key: {
-            questionId: {
-              S: questionId.stringValue,
-            },
-          },
-          TableName: TABLE_NAME,
-          ExpressionAttributeNames: {
-            "#subscribers": "subscribers",
-          },
-          ExpressionAttributeValues: {
-            ":subscriberId": {
-              SS: [subscriber.stringValue],
-            },
-          },
-          UpdateExpression: "ADD #subscribers :subscriberId",
-        };
-        return dynamo.updateItem(paramsUpdate, function (err, data) {
-          if (err) {
-            console.log("Error", err);
-          } else {
-            console.log("Success", data);
-          }
-        });
-      default:
-        return "Unknown operation: ${operation}";
-    }
-  });
-};
-
 const sqsMessageEvent = {
   Records: [
     {
@@ -145,7 +88,7 @@ const sqsMessageEvent = {
 var params = {
   TableName: "subscribers_db",
   Key: {
-    questionId: { S: "33333" },
+    questionId: { S: "11" },
   },
 };
 

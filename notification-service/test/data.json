@@ -1,13 +1,20 @@
 {
   "Records": [
     {
-      "body": "{\n  \"Type\" : \"Notification\",\n  \"MessageId\" : \"b2fe8837-aa24-5985-8c09-d08a3e3c3663\",\n  \"TopicArn\" : \"arn:aws:sns:eu-west-1:686136373428:notifications_service_topic\",\n  \"Subject\" : \"send_notification topic\",\n  \"Message\" : \"send_notification body \",\n  \"Timestamp\" : \"2021-03-06T14:29:44.510Z\",\n  \"SignatureVersion\" : \"1\",\n  \"Signature\" : \"cZxF8xCdZlqOeFl/3jEF3aXkrQTnmiZEEEnNvSJrzFCYv+svi+NstKVEGnWbIMAGmUHTXUHDEWYZMgtXocCBnMmReugoqOPIBnRTWn6lPWVYWj1wWK0zuPP/ei7OpkPa4roNiKAIA49d7VdcAt4DPwjSiYAoi153Vh4C9JK52oAr1b443HiEukMuLXXwM3MqinOqmbh2jklaZB/Ajd1j0BsHmQ3Tgwt0UOEuXSA7mK1bTEDw+FnscVaRS7p64jmKZXyf83djbuLdYDSDYWUdwEq5jRuE7V2Mic7Hw/rJjxELRKt/APz4HeHB6Sxnuzs3wTytpduhRhVw8k9hA2GcJg==\",\n  \"SigningCertURL\" : \"https://sns.eu-west-1.amazonaws.com/SimpleNotificationService-010a507c1833636cd94bdb98bd93083a.pem\",\n  \"UnsubscribeURL\" : \"https://sns.eu-west-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-west-1:686136373428:notifications_service_topic:6af129e1-fcb8-4fd7-aea7-fc4ca0dfebe4\",\n  \"MessageAttributes\" : {\n    \"questionId\" : {\"Type\":\"String\",\"Value\":\"11111\"},\n    \"Subject\" : {\"Type\":\"String\",\"Value\":\"send_notification\"}\n  }\n}"
-    },
-    {
-      "body": "{\n  \"Type\" : \"Notification\",\n  \"MessageId\" : \"b2fe8837-aa24-5985-8c09-d08a3e3c3663\",\n  \"TopicArn\" : \"arn:aws:sns:eu-west-1:686136373428:notifications_service_topic\",\n  \"Subject\" : \"send_notification topic\",\n  \"Message\" : \"send_notification body \",\n  \"Timestamp\" : \"2021-03-06T14:29:44.510Z\",\n  \"SignatureVersion\" : \"1\",\n  \"Signature\" : \"cZxF8xCdZlqOeFl/3jEF3aXkrQTnmiZEEEnNvSJrzFCYv+svi+NstKVEGnWbIMAGmUHTXUHDEWYZMgtXocCBnMmReugoqOPIBnRTWn6lPWVYWj1wWK0zuPP/ei7OpkPa4roNiKAIA49d7VdcAt4DPwjSiYAoi153Vh4C9JK52oAr1b443HiEukMuLXXwM3MqinOqmbh2jklaZB/Ajd1j0BsHmQ3Tgwt0UOEuXSA7mK1bTEDw+FnscVaRS7p64jmKZXyf83djbuLdYDSDYWUdwEq5jRuE7V2Mic7Hw/rJjxELRKt/APz4HeHB6Sxnuzs3wTytpduhRhVw8k9hA2GcJg==\",\n  \"SigningCertURL\" : \"https://sns.eu-west-1.amazonaws.com/SimpleNotificationService-010a507c1833636cd94bdb98bd93083a.pem\",\n  \"UnsubscribeURL\" : \"https://sns.eu-west-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-west-1:686136373428:notifications_service_topic:6af129e1-fcb8-4fd7-aea7-fc4ca0dfebe4\",\n  \"MessageAttributes\" : {\n    \"questionId\" : {\"Type\":\"String\",\"Value\":\"11111\"},\n    \"Subject\" : {\"Type\":\"String\",\"Value\":\"send_notification\"}\n  }\n}"
-    },
-    {
-      "body": "{\n  \"Type\" : \"Notification\",\n  \"MessageId\" : \"b2fe8837-aa24-5985-8c09-d08a3e3c3663\",\n  \"TopicArn\" : \"arn:aws:sns:eu-west-1:686136373428:notifications_service_topic\",\n  \"Subject\" : \"send_notification topic\",\n  \"Message\" : \"send_notification body \",\n  \"Timestamp\" : \"2021-03-06T14:29:44.510Z\",\n  \"SignatureVersion\" : \"1\",\n  \"Signature\" : \"cZxF8xCdZlqOeFl/3jEF3aXkrQTnmiZEEEnNvSJrzFCYv+svi+NstKVEGnWbIMAGmUHTXUHDEWYZMgtXocCBnMmReugoqOPIBnRTWn6lPWVYWj1wWK0zuPP/ei7OpkPa4roNiKAIA49d7VdcAt4DPwjSiYAoi153Vh4C9JK52oAr1b443HiEukMuLXXwM3MqinOqmbh2jklaZB/Ajd1j0BsHmQ3Tgwt0UOEuXSA7mK1bTEDw+FnscVaRS7p64jmKZXyf83djbuLdYDSDYWUdwEq5jRuE7V2Mic7Hw/rJjxELRKt/APz4HeHB6Sxnuzs3wTytpduhRhVw8k9hA2GcJg==\",\n  \"SigningCertURL\" : \"https://sns.eu-west-1.amazonaws.com/SimpleNotificationService-010a507c1833636cd94bdb98bd93083a.pem\",\n  \"UnsubscribeURL\" : \"https://sns.eu-west-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-west-1:686136373428:notifications_service_topic:6af129e1-fcb8-4fd7-aea7-fc4ca0dfebe4\",\n  \"MessageAttributes\" : {\n    \"questionId\" : {\"Type\":\"String\",\"Value\":\"11111\"},\n    \"Subject\" : {\"Type\":\"String\",\"Value\":\"send_notification\"}\n  }\n}"
+      "body": {
+        "MessageAttributes": {
+          "questionId": { "Type": "String", "Value": "11111" },
+          "subscriber": { "Type": "String", "Value": "asd@asd.ds" },
+          "subscriptionType": {
+            "Type": "String",
+            "Value": "createSubscription"
+          },
+          "topicSubscriptionName": {
+            "Type": "String",
+            "Value": "subscription_to_question"
+          }
+        }
+      }
     }
   ]
 }

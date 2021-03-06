@@ -15,10 +15,6 @@ const dynamo = new AWS.DynamoDB({
 });
 
 exports.handler = async function (event) {
-  console.log(
-    "🚀 ~ file: lambda-subscriber.js ~ line 18 ~ event",
-    JSON.stringify(event)
-  );
   return await Promise.all(
     event.Records.map(async (record) => {
       const snsMessage = JSON.parse(record.body);
@@ -44,10 +40,6 @@ exports.handler = async function (event) {
               },
             };
             const createResponse = await dynamo.putItem(paramsCreate).promise();
-            console.log(
-              "🚀 ~ file: lambda-subscriber.js ~ line 47 ~ event.Records.map ~ createResponse",
-              createResponse
-            );
             return createResponse;
           case "addSubscriber":
             const paramsUpdate = {
@@ -70,10 +62,6 @@ exports.handler = async function (event) {
             const updateResponse = await dynamo
               .updateItem(paramsUpdate)
               .promise();
-            console.log(
-              "🚀 ~ file: lambda-subscriber.js ~ line 70 ~ event.Records.map ~ updateResponse",
-              updateResponse
-            );
             return updateResponse;
         }
       } catch (err) {
