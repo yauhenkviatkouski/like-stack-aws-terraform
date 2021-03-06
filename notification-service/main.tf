@@ -140,7 +140,7 @@ resource "aws_sqs_queue_policy" "subscribers_queue_policy" {
       "Resource": "${aws_sqs_queue.subscribers_queue.arn}",
       "Condition": {
          "ArnEquals": {
-          "aws:SourceArn": "${aws_sns_topic.notifications_service_topic.arn}"
+          "aws:SourceArn": "${aws_sns_topic.subscribe_to_question.arn}"
         }
       }
     }
@@ -188,7 +188,7 @@ resource "aws_sqs_queue_policy" "notifications_queue_policy" {
       "Resource": "${aws_sqs_queue.notifications_queue.arn}",
       "Condition": {
          "ArnEquals": {
-          "aws:SourceArn": "${aws_sns_topic.notifications_service_topic.arn}"
+          "aws:SourceArn": "${aws_sns_topic.send_notification.arn}"
         }
       }
     }
@@ -197,44 +197,36 @@ resource "aws_sqs_queue_policy" "notifications_queue_policy" {
 POLICY
 }
 
-resource "aws_sns_topic" "notifications_service_topic" {
-  name = "notifications_service_topic"
+resource "aws_sns_topic" "subscribe_to_question" {
+  name = "subscribe_to_question"
 }
 
 resource "aws_sns_topic_subscription" "subscribe_to_question" {
-    topic_arn = aws_sns_topic.notifications_service_topic.arn
+    topic_arn = aws_sns_topic.subscribe_to_question.arn
     protocol  = "sqs"
     endpoint  = aws_sqs_queue.subscribers_queue.arn
-    filter_policy = <<EOF
-  {
-    "Subject": ["subscribtion_to_question"]
-  }
-  EOF
+}
+
+resource "aws_sns_topic" "send_notification" {
+  name = "send_notification"
 }
 
 resource "aws_sns_topic_subscription" "send_notification" {
-    topic_arn = aws_sns_topic.notifications_service_topic.arn
+    topic_arn = aws_sns_topic.send_notification.arn
     protocol  = "sqs"
     endpoint  = aws_sqs_queue.notifications_queue.arn
-    filter_policy = <<EOF
-  {
-    "Subject": ["send_notification"]
-  }
-  EOF
 }
 
 output "subscribers_queue_url" {
-  value = aws_sqs_queue.subscribers_queue.id
-}
-
-output "sns_topic_queue_url" {
-  value = aws_sns_topic.notifications_service_topic.id
+  value = aws_sqs_queue.notifications_queue.id
 }
 
 resource "local_file" "output_variables" {
     content     =  <<EOF
   {
-    "notifications_service_topic_url": "${aws_sns_topic.notifications_service_topic.id}"
+    "aws_sns_topic_send_notification": "${aws_sns_topic.send_notification.id}",
+    "aws_sns_topic_subscribe_to_question": "${aws_sns_topic.subscribe_to_question.id}"
+  
   }
   EOF
     filename = "${path.module}/output_variables.json"
