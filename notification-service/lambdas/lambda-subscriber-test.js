@@ -15,6 +15,22 @@ const sqs = new AWS.SQS({
   // secretAccessKey: "mock_secret_key",
 });
 
+const sqs = new AWS.SNS({
+  apiVersion: "2010-03-31",
+  region: "eu-west-1",
+});
+
+var params = {
+  Message: "message text",
+  MessageAttributes: {
+    questionId: {
+      DataType: "String",
+      StringValue: "33333",
+    },
+  },
+  TopicArn: "STRING_VALUE",
+};
+
 var params = {
   // Remove DelaySeconds parameter and value for FIFO queues
   DelaySeconds: 10,
@@ -133,10 +149,20 @@ var params = {
   },
 };
 
-dynamo.getItem(params, function (err, data) {
-  if (err) {
-    console.log("Error", err);
-  } else {
-    console.log("Success", JSON.stringify(data));
-  }
-});
+// dynamo.getItem(params, function (err, data) {
+//   if (err) {
+//     console.log("Error", err);
+//   } else {
+//     console.log("Success", JSON.stringify(data));
+//   }
+// });
+
+const caller = async () => {
+  const result = await dynamo.getItem(params).promise();
+  console.log(
+    "🚀 ~ file: lambda-subscriber-test.js ~ line 147 ~ caller ~ result",
+    JSON.stringify(result)
+  );
+};
+
+caller();

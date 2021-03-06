@@ -144,12 +144,12 @@ resource "aws_lambda_function" "lambda_notifyer" {
   runtime       = "nodejs12.x"
 }
 
-resource "aws_sns_topic" "question_updates" {
-  name = "question-updates-topic"
+resource "aws_sns_topic" "question_updates_topic" {
+  name = "question_updates_topic"
 }
 
 resource "aws_sns_topic_subscription" "question_updates_topic_subscription" {
-    topic_arn = aws_sns_topic.question_updates.arn
+    topic_arn = aws_sns_topic.question_updates_topic.arn
     protocol  = "lambda"
     endpoint  = aws_lambda_function.lambda_notifyer.arn
 }
@@ -159,7 +159,7 @@ resource "aws_lambda_permission" "allow_sns_invoke" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda_notifyer.function_name
   principal     = "sns.amazonaws.com"
-  source_arn    = aws_sns_topic.question_updates.arn
+  source_arn    = aws_sns_topic.question_updates_topic.arn
 }
 
 output "subscribers_queue_url" {
