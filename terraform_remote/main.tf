@@ -4,10 +4,6 @@ provider "aws" {
   secret_key = "KHO7YQ8DMYe8lhZXSbnWrHPoVb9waCXByVNj9h9t"
 }
 
-# module "project" {
-#   source = "../"
-# }
-
 module "lamda_and_sqs" {
   source = "../notification-service"
 }

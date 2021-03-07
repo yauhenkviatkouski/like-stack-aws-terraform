@@ -19,10 +19,6 @@ provider "aws" {
   }
 }
 
-# module "project" {
-#   source = "../"
-# }
-
 module "lamda_and_sqs" {
   source = "../notification-service"
 }

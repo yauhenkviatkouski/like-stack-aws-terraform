@@ -1,5 +1,0 @@
-  {
-    "aws_sns_topic_send_notification": "arn:aws:sns:eu-west-1:000000000000:send_notification",
-    "aws_sns_topic_subscribe_to_question": "arn:aws:sns:eu-west-1:000000000000:subscribe_to_question"
-  
-  }

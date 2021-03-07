@@ -235,7 +235,3 @@ resource "local_file" "output_variables" {
   EOF
     filename = "${path.module}/output_variables.json"
 }
-
-data "local_file" "input_variables" {
-    filename = "${path.module}/../tfvars.json"
-}

@@ -9,3 +9,7 @@ data "archive_file" "lambda_notifier_zip" {
   source_dir = "${path.module}/lambdas/lambda-notifier"
   output_path = "${path.module}/lambdas/lambda-notifier.zip"
 }
+
+data "local_file" "input_variables" {
+    filename = "${path.module}/../tfvars.json"
+}

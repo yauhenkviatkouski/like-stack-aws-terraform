@@ -1,7 +1,7 @@
 {
   "name": "notification-service",
   "version": "1.0.0",
-  "description": "aws notification service fo lsapp",
+  "description": "aws notification service for lsapp",
   "main": "n",
   "scripts": {
     "test": "mocha --timeout 10000"

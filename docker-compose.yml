@@ -25,3 +25,8 @@ services:
     volumes:
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
+
+  ls-api:
+    build: like-stack-api/
+    ports:
+      - 3005:3005

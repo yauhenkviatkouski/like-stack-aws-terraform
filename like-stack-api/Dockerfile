@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 3005
 
-CMD node ./bin/www --bind 0.0.0.0:$PORT
+CMD npm start --bind 0.0.0.0:$PORT
