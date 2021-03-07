@@ -20,12 +20,12 @@ const sns = new AWS.SNS({
   ...mockParams,
 });
 
-describe("subscription process", function () {
+describe("subscription process", async function () {
   const getPromiseTimeout = () =>
     new Promise((resolve) => {
       setTimeout(() => {
         resolve();
-      }, 2000);
+      }, 3000);
     });
 
   it("should add new question & subscriber to DB", async function () {

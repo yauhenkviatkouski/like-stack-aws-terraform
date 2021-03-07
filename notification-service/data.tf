@@ -4,8 +4,8 @@ data "archive_file" "lambda_subscriber_zip" {
   output_path = "${path.module}/lambdas/lambda-subscriber.zip"
 }
 
-data "archive_file" "lambda_notifyer_zip" {
+data "archive_file" "lambda_notifier_zip" {
   type        = "zip"
-  source_dir = "${path.module}/lambdas/lambda-notifyer"
-  output_path = "${path.module}/lambdas/lambda-notifyer.zip"
+  source_dir = "${path.module}/lambdas/lambda-notifier"
+  output_path = "${path.module}/lambdas/lambda-notifier.zip"
 }

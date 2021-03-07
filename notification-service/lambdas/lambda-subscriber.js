@@ -15,7 +15,7 @@ const dynamo = new AWS.DynamoDB({
 });
 
 exports.handler = async function (event) {
-  return await Promise.all(
+  return await Promise.allSettled(
     event.Records.map(async (record) => {
       const snsMessage = JSON.parse(record.body);
       const {
@@ -25,7 +25,7 @@ exports.handler = async function (event) {
       } = snsMessage.MessageAttributes;
 
       try {
-        const TABLE_NAME = "subscribers_db";
+        const TABLE_NAME = process.env.SUBSCRIBERS_DB_TABLE_NAME;
         switch (subscriptionType.Value) {
           case "createSubscription":
             const paramsCreate = {

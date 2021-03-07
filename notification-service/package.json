@@ -4,7 +4,7 @@
   "description": "aws notification service fo lsapp",
   "main": "n",
   "scripts": {
-    "test": "mocha --timeout 5000"
+    "test": "mocha --timeout 10000"
   },
   "author": "yauhenkviatkouski",
   "license": "ISC",

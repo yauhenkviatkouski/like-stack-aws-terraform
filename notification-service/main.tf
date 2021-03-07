@@ -1,7 +1,3 @@
-# provider "aws" {
-#    region = "eu-west-1"
-# }
-
 terraform {
   required_providers {
     aws = {
@@ -12,10 +8,10 @@ terraform {
 }
 
 resource "aws_dynamodb_table" "subscribers_db" {
-  name             = "subscribers_db"
-  hash_key         = "questionId"
-  billing_mode   = "PROVISIONED"
-  read_capacity  = 5
+  name = jsondecode(data.local_file.input_variables.content).SUBSCRIBERS_DB_TABLE_NAME
+  hash_key = "questionId"
+  billing_mode = "PROVISIONED"
+  read_capacity = 5
   write_capacity = 5
   attribute {
     name = "questionId"
@@ -108,6 +104,11 @@ resource "aws_lambda_function" "lambda_subscriber" {
   handler       = "lambda-subscriber.handler"
   source_code_hash = data.archive_file.lambda_subscriber_zip.output_base64sha256
   runtime       = "nodejs12.x"
+  environment {
+    variables = {
+      SUBSCRIBERS_DB_TABLE_NAME = jsondecode(data.local_file.input_variables.content).SUBSCRIBERS_DB_TABLE_NAME
+    }
+  }
 }
 
 resource "aws_lambda_event_source_mapping" "lambda_subscriber" {
@@ -149,19 +150,26 @@ resource "aws_sqs_queue_policy" "subscribers_queue_policy" {
 POLICY
 }
 
-resource "aws_lambda_function" "lambda_notifyer" {
+resource "aws_lambda_function" "lambda_notifier" {
 
-  function_name = "lambda_notifyer"
-  filename         = "${path.module}/lambdas/lambda-notifyer.zip"
+  function_name = "lambda_notifier"
+  filename         = "${path.module}/lambdas/lambda-notifier.zip"
   role          = aws_iam_role.lambda_role.arn
-  handler       = "lambda-notifyer.handler"
-  source_code_hash = data.archive_file.lambda_notifyer_zip.output_base64sha256
+  handler       = "lambda-notifier.handler"
+  source_code_hash = data.archive_file.lambda_notifier_zip.output_base64sha256
   runtime       = "nodejs12.x"
+  environment {
+    variables = {
+      SES_ACCESS_KEY = jsondecode(data.local_file.input_variables.content).SES_ACCESS_KEY
+      SES_SECRET_KEY = jsondecode(data.local_file.input_variables.content).SES_SECRET_KEY
+      SUBSCRIBERS_DB_TABLE_NAME = jsondecode(data.local_file.input_variables.content).SUBSCRIBERS_DB_TABLE_NAME
+    }
+  }
 }
 
-resource "aws_lambda_event_source_mapping" "lambda_notifyer" {
+resource "aws_lambda_event_source_mapping" "lambda_notifier" {
   event_source_arn = aws_sqs_queue.notifications_queue.arn
-  function_name    = aws_lambda_function.lambda_notifyer.arn
+  function_name    = aws_lambda_function.lambda_notifier.arn
 }
 
 resource "aws_sqs_queue" "notifications_queue" {
@@ -217,10 +225,6 @@ resource "aws_sns_topic_subscription" "send_notification" {
     endpoint  = aws_sqs_queue.notifications_queue.arn
 }
 
-output "subscribers_queue_url" {
-  value = aws_sqs_queue.notifications_queue.id
-}
-
 resource "local_file" "output_variables" {
     content     =  <<EOF
   {
@@ -232,3 +236,6 @@ resource "local_file" "output_variables" {
     filename = "${path.module}/output_variables.json"
 }
 
+data "local_file" "input_variables" {
+    filename = "${path.module}/../tfvars.json"
+}
