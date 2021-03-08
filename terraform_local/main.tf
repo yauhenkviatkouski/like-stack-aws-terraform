@@ -22,3 +22,4 @@ provider "aws" {
 module "lamda_and_sqs" {
   source = "../notification-service"
 }
+
