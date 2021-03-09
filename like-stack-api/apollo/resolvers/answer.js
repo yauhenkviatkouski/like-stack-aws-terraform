@@ -1,5 +1,6 @@
 const DataLoader = require('dataloader');
 const getRequestFieldNames = require('../../helpers/getRequestFieldNames');
+const { notifyAboutAnswer } = require('../../helpers/notificationService');
 
 module.exports = {
   Mutation: {
@@ -7,7 +8,10 @@ module.exports = {
       if (!auth.hasSignedIn || auth.getUserId() != answer.author) {
         throw new Error('unauthorized');
       }
-      return await dataSources.Answer.create(answer);
+      const question = await dataSources.Question.getOneById(answer.question);
+      const createAnswerResponse = await dataSources.Answer.create(answer);
+      notifyAboutAnswer(String(answer.question), question.header)
+      return createAnswerResponse
     },
     acceptAnswer: async (_, { answerId }, { dataSources, auth }, info) => {
       const answer = await dataSources.Answer.getOneById(answerId);

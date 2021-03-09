@@ -49,7 +49,7 @@ exports.handler = async function (event) {
             const mailOptions = {
               from: "lsapp.mail@gmail.com",
               to: "kvetkovski@gmail.com",
-              subject: "Like-stack questions update",
+              subject: "Like-stack questions update for " + subscriber,
               text: messageText,
             };
 

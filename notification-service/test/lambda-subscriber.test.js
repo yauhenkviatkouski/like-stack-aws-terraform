@@ -20,6 +20,8 @@ const sns = new AWS.SNS({
   ...mockParams,
 });
 
+
+
 describe("subscription process", async function () {
   const getPromiseTimeout = () =>
     new Promise((resolve) => {
@@ -28,73 +30,83 @@ describe("subscription process", async function () {
       }, 3000);
     });
 
-  it("should add new question & subscriber to DB", async function () {
-    const QUESTION_ID = "001";
-    const SUBSCRIBER_EMAIL = "mock@mail.com";
-    const params = {
-      TopicArn: "arn:aws:sns:eu-west-1:000000000000:subscribe_to_question",
-      Message: "mock",
-      MessageAttributes: {
-        questionId: { DataType: "String", StringValue: QUESTION_ID },
-        subscriber: { DataType: "String", StringValue: SUBSCRIBER_EMAIL },
-        subscriptionType: {
-          DataType: "String",
-          StringValue: "createSubscription",
-        },
-      },
-    };
-    await sns.publish(params).promise();
-
-    const timeout = getPromiseTimeout();
-    await timeout;
-
     const dbResponse = await dynamo
       .getItem({
         TableName: "subscribers_db",
         Key: {
-          questionId: { S: QUESTION_ID },
+          questionId: { S: '604666a99c5bb700bb68b258' },
         },
       })
       .promise();
+    console.log("🚀 ~ file: lambda-subscriber.test.js ~ line 59 ~ dbResponse", JSON.stringify(dbResponse))
 
-    assert.strictEqual(
-      dbResponse.Item.subscribers.SS.includes(SUBSCRIBER_EMAIL),
-      true
-    );
-  });
+  // it("should add new question & subscriber to DB", async function () {
+  //   const QUESTION_ID = "001";
+  //   const SUBSCRIBER_EMAIL = "mock@mail.com";
+  //   const params = {
+  //     TopicArn: "arn:aws:sns:eu-west-1:000000000000:subscribe_to_question",
+  //     Message: "mock",
+  //     MessageAttributes: {
+  //       questionId: { DataType: "String", StringValue: QUESTION_ID },
+  //       subscriber: { DataType: "String", StringValue: SUBSCRIBER_EMAIL },
+  //       subscriptionType: {
+  //         DataType: "String",
+  //         StringValue: "createSubscription",
+  //       },
+  //     },
+  //   };
+  //   await sns.publish(params).promise();
 
-  it("should add subscriber to existing question in DB", async function () {
-    const QUESTION_ID = "001";
-    const SUBSCRIBER_EMAIL = "newSubscriber@mail.com";
-    const params = {
-      TopicArn: "arn:aws:sns:eu-west-1:000000000000:subscribe_to_question",
-      Message: "mock",
-      MessageAttributes: {
-        questionId: { DataType: "String", StringValue: QUESTION_ID },
-        subscriber: { DataType: "String", StringValue: SUBSCRIBER_EMAIL },
-        subscriptionType: {
-          DataType: "String",
-          StringValue: "addSubscriber",
-        },
-      },
-    };
-    await sns.publish(params).promise();
+  //   const timeout = getPromiseTimeout();
+  //   await timeout;
 
-    const timeout = getPromiseTimeout();
-    await timeout;
+  //   const dbResponse = await dynamo
+  //     .getItem({
+  //       TableName: "subscribers_db",
+  //       Key: {
+  //         questionId: { S: QUESTION_ID },
+  //       },
+  //     })
+  //     .promise();
 
-    const dbResponse = await dynamo
-      .getItem({
-        TableName: "subscribers_db",
-        Key: {
-          questionId: { S: QUESTION_ID },
-        },
-      })
-      .promise();
+  //   assert.strictEqual(
+  //     dbResponse.Item.subscribers.SS.includes(SUBSCRIBER_EMAIL),
+  //     true
+  //   );
+  // });
 
-    assert.strictEqual(
-      dbResponse.Item.subscribers.SS.includes(SUBSCRIBER_EMAIL),
-      true
-    );
-  });
+  // it("should add subscriber to existing question in DB", async function () {
+  //   const QUESTION_ID = "001";
+  //   const SUBSCRIBER_EMAIL = "newSubscriber@mail.com";
+  //   const params = {
+  //     TopicArn: "arn:aws:sns:eu-west-1:000000000000:subscribe_to_question",
+  //     Message: "mock",
+  //     MessageAttributes: {
+  //       questionId: { DataType: "String", StringValue: QUESTION_ID },
+  //       subscriber: { DataType: "String", StringValue: SUBSCRIBER_EMAIL },
+  //       subscriptionType: {
+  //         DataType: "String",
+  //         StringValue: "addSubscriber",
+  //       },
+  //     },
+  //   };
+  //   await sns.publish(params).promise();
+
+  //   const timeout = getPromiseTimeout();
+  //   await timeout;
+
+  //   const dbResponse = await dynamo
+  //     .getItem({
+  //       TableName: "subscribers_db",
+  //       Key: {
+  //         questionId: { S: QUESTION_ID },
+  //       },
+  //     })
+  //     .promise();
+
+  //   assert.strictEqual(
+  //     dbResponse.Item.subscribers.SS.includes(SUBSCRIBER_EMAIL),
+  //     true
+  //   );
+  // });
 });

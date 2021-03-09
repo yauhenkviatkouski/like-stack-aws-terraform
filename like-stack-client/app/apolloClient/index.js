@@ -1,9 +1,10 @@
 import { ApolloClient, gql } from '@apollo/client';
 import { createHttpLink } from 'apollo-link-http';
 import { cache } from './cache';
+import { config } from '../config';
 
 const link = createHttpLink({
-  uri: 'https://like-stack-api-dock.herokuapp.com',
+  uri: config.SERVER_LINK,
   credentials: 'include',
 });
 

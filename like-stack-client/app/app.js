@@ -5,7 +5,6 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import App from 'containers/App';
-import { getConfig } from './config';
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import './styles.scss';
 import { client } from './apolloClient';
@@ -22,4 +21,4 @@ const renderApp = () => {
   );
 };
 
-getConfig().then(renderApp);
+renderApp();

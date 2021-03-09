@@ -4,6 +4,6 @@ dockerized like-stack server api
 
 \$ heroku container:login
 
-\$ heroku container:push web -a=app-name on heroku
+\$ heroku container:push web -a=like-stack-api-dock
 
-\$ heroku container:release web
+\$ heroku container:release web -a=like-stack-api-dock

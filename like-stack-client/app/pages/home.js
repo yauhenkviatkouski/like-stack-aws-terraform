@@ -68,6 +68,7 @@ export default () => {
       ))}
       {hasMore && (
         <Button
+          style={{ margin: '0' }}
           onClick={() => getMoreQuestions()}
           variant="secondary"
           size="lg"

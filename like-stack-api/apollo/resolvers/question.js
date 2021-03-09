@@ -1,5 +1,6 @@
 const DataLoader = require('dataloader');
 const getRequestFieldNames = require('../../helpers/getRequestFieldNames');
+const { subscribeToQuestion } = require('../../helpers/notificationService');
 
 module.exports = {
   Query: {
@@ -39,10 +40,19 @@ module.exports = {
   },
   Mutation: {
     createQuestion: async (_, { question }, { dataSources, auth }, info) => {
-      if (!auth.hasSignedIn || auth.getUserId() != question.author) {
+      console.log("🚀 ~ file: question.js ~ line 43 ~ createQuestion: ~ question", question)
+      const getUser = auth.getUserId()
+      console.log('auth.getUserId() : ', getUser)
+      if (auth.getUserId() != question.author) {
         throw new Error('unauthorized');
       }
-      return await dataSources.Question.create(question);
+      const newQuestion = await dataSources.Question.create(question);
+      console.log("🚀 ~ file: question.js ~ line 47 ~ createQuestion: ~ newQuestion", newQuestion)
+      const user = await dataSources.User.getOneById(newQuestion.author);
+      const subscriberEmail = user.email;
+      subscribeToQuestion((String(newQuestion._id)), subscriberEmail);
+
+      return newQuestion;
     },
   },
   Question: {

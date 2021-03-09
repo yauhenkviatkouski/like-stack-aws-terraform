@@ -11,6 +11,7 @@
     "apollo-datasource": "^0.7.0",
     "apollo-server": "^2.11.0",
     "apollo-server-express": "^2.11.0",
+    "aws-sdk": "^2.858.0",
     "bcryptjs": "^2.4.3",
     "bunyan": "^1.8.12",
     "config": "^3.2.4",
