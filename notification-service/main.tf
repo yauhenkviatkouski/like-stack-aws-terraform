@@ -96,14 +96,46 @@ resource "aws_iam_role_policy" "lambdas_policy" {
 EOF
 }
 
+resource "aws_s3_bucket" "notification-services-lambdas" {
+  bucket = "notification-services-lambdas"
+  acl = "public-read"
+  force_destroy = true
+
+
+  policy = <<EOF
+{
+  "Version": "2008-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicReadForGetBucketObjects",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::notification-services-lambdas/*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_s3_bucket_object" "lambda_subscriber_upload" {
+  bucket = aws_s3_bucket.notification-services-lambdas.id
+  key    = "lambdas/lambda-subscriber.zip"
+  source = data.archive_file.lambda_subscriber_zip.output_path
+}
+
+
+
 resource "aws_lambda_function" "lambda_subscriber" {
 
   function_name = "lambda_subscriber"
-  filename         = "${path.module}/lambdas/lambda-subscriber.zip"
-  role          = aws_iam_role.lambda_role.arn
-  handler       = "lambda-subscriber.handler"
+  # filename = "${path.module}/lambdas/lambda-subscriber.zip"
+  s3_bucket = aws_s3_bucket.notification-services-lambdas.id
+  s3_key = aws_s3_bucket_object.lambda_subscriber_upload.key
+  role  = aws_iam_role.lambda_role.arn
+  handler  = "lambda-subscriber.handler"
   source_code_hash = data.archive_file.lambda_subscriber_zip.output_base64sha256
-  runtime       = "nodejs12.x"
+  runtime = "nodejs12.x"
   environment {
     variables = {
       SUBSCRIBERS_DB_TABLE_NAME = jsondecode(data.local_file.input_variables.content).SUBSCRIBERS_DB_TABLE_NAME
@@ -150,10 +182,18 @@ resource "aws_sqs_queue_policy" "subscribers_queue_policy" {
 POLICY
 }
 
-resource "aws_lambda_function" "lambda_notifier" {
+resource "aws_s3_bucket_object" "lambda_notifier_upload" {
+  bucket = aws_s3_bucket.notification-services-lambdas.id
+  key    = "lambdas/lambda-notifier.zip"
+  source = data.archive_file.lambda_notifier_zip.output_path
+}
 
+
+resource "aws_lambda_function" "lambda_notifier" {
   function_name = "lambda_notifier"
-  filename         = "${path.module}/lambdas/lambda-notifier.zip"
+  # filename         = "${path.module}/lambdas/lambda-notifier.zip"
+  s3_bucket = aws_s3_bucket.notification-services-lambdas.id
+  s3_key = aws_s3_bucket_object.lambda_notifier_upload.key
   role          = aws_iam_role.lambda_role.arn
   handler       = "lambda-notifier.handler"
   source_code_hash = data.archive_file.lambda_notifier_zip.output_base64sha256
