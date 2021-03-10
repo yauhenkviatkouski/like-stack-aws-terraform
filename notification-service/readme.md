@@ -6,3 +6,6 @@ uses amazon web services:
 - sqs
 - lambda
 - dynamoDB
+
+install dependencies for lambda notifier before deploying via terraform
+npm i nodemailer-smtp-transport nodemailer --prefix ./

@@ -37,7 +37,11 @@ class Auth {
   }
 
   signOut() {
-    this.res.clearCookie(this.accessTokenName);
+    this.res.clearCookie(this.accessTokenName, {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'None',
+    });
   }
 
   getUserId() {

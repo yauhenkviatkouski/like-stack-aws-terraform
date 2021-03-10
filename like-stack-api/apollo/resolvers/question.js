@@ -11,7 +11,7 @@ module.exports = {
       { fieldNodes },
     ) => {
       const selectionFieldsForQuestions = fieldNodes[0].selectionSet.selections.find(
-        selection => selection.name.value === 'questions',
+        (selection) => selection.name.value === 'questions',
       );
       let questions;
       if (header) {
@@ -40,17 +40,14 @@ module.exports = {
   },
   Mutation: {
     createQuestion: async (_, { question }, { dataSources, auth }, info) => {
-      console.log("🚀 ~ file: question.js ~ line 43 ~ createQuestion: ~ question", question)
-      const getUser = auth.getUserId()
-      console.log('auth.getUserId() : ', getUser)
+      const getUser = auth.getUserId();
       if (auth.getUserId() != question.author) {
         throw new Error('unauthorized');
       }
       const newQuestion = await dataSources.Question.create(question);
-      console.log("🚀 ~ file: question.js ~ line 47 ~ createQuestion: ~ newQuestion", newQuestion)
       const user = await dataSources.User.getOneById(newQuestion.author);
       const subscriberEmail = user.email;
-      subscribeToQuestion((String(newQuestion._id)), subscriberEmail);
+      subscribeToQuestion(String(newQuestion._id), subscriberEmail);
 
       return newQuestion;
     },
@@ -60,7 +57,7 @@ module.exports = {
       const queryFields = getRequestFieldNames(info.fieldNodes[0], 'question');
       let dl = dataLoaders.get(info.fieldNodes);
       if (!dl) {
-        dl = new DataLoader(async ids => {
+        dl = new DataLoader(async (ids) => {
           return dataSources.Answer.getByQuestionIds(ids, queryFields);
         });
         dataLoaders.set(info.fieldNodes, dl);
@@ -71,7 +68,7 @@ module.exports = {
       const queryFields = getRequestFieldNames(info.fieldNodes[0]);
       let dl = dataLoaders.get(info.fieldNodes);
       if (!dl) {
-        dl = new DataLoader(async ids => {
+        dl = new DataLoader(async (ids) => {
           return dataSources.User.getManyByIds(ids, queryFields);
         });
         dataLoaders.set(info.fieldNodes, dl);
