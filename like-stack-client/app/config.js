@@ -1,5 +1,5 @@
 export const config = {
-  SERVER_LINK: 'http://localhost:3005',
+  SERVER_LINK: 'https://like-stack-api-dock.herokuapp.com/',
   LIMIT_QUESTIONS: 5,
   userRatingPointsWeight: {
     votes: 5,

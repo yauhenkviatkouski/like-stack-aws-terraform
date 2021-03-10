@@ -29,9 +29,10 @@ class Auth {
     const token = createJwt({ uid: user.id });
 
     this.res.cookie(this.accessTokenName, token, {
-      secure: false,
+      secure: true,
       httpOnly: true,
-      expires: new Date(Date.now() + ONE_HOUR),
+      sameSite: 'None',
+      expires: new Date(Date.now() + ONE_HOUR * 3),
     });
   }
 
