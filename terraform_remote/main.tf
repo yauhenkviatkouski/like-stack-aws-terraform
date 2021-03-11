@@ -7,7 +7,3 @@ provider "aws" {
 module "lamda_and_sqs" {
   source = "../notification-service"
 }
-
-module "static_web_hosting" {
-  source = "../like-stack-client"
-}
