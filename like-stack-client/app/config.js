@@ -1,5 +1,5 @@
 const SERVER_LINK =
-  process.env.NODE_ENV === 'production'
+  window.location.hostname !== 'localhost'
     ? 'https://like-stack-api-dock.herokuapp.com/'
     : 'http://localhost:3005/';
 

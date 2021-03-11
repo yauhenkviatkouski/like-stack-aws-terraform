@@ -11,7 +11,6 @@ import { client } from './apolloClient';
 
 const MOUNT_NODE = document.getElementById('app');
 const renderApp = () => {
-  console.log(process.env.NODE_ENV);
   ReactDOM.render(
     <ApolloProvider client={client}>
       <Router>
