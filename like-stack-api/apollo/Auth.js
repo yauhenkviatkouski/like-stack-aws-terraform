@@ -1,4 +1,11 @@
 const { authenticate, createJwt } = require('../helpers/config-passport');
+const cookieProdOptions =
+  process.env.NODE_ENV === 'production'
+    ? {
+        secure: true,
+        sameSite: 'None',
+      }
+    : {};
 
 const ONE_HOUR = 1000 * 60 * 60;
 
@@ -29,18 +36,16 @@ class Auth {
     const token = createJwt({ uid: user.id });
 
     this.res.cookie(this.accessTokenName, token, {
-      secure: true,
       httpOnly: true,
-      sameSite: 'None',
       expires: new Date(Date.now() + ONE_HOUR * 3),
+      ...cookieProdOptions,
     });
   }
 
   signOut() {
     this.res.clearCookie(this.accessTokenName, {
-      secure: true,
       httpOnly: true,
-      sameSite: 'None',
+      ...cookieProdOptions,
     });
   }
 
