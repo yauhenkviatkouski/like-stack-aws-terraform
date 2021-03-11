@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --legacy-watch ./bin/www"
+    "start": "nodemon --legacy-watch ./bin/www",
+    "deploy:heroku": "heroku container:login && heroku container:push web -a=like-stack-api-dock && heroku container:release web -a=like-stack-api-dock"
   },
   "dependencies": {
     "apollo-datasource": "^0.7.0",

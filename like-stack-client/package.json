@@ -13,6 +13,7 @@
   "author": "Max Stoiber",
   "license": "MIT",
   "scripts": {
+    "deploy:heroku": "heroku container:login && heroku container:push web -a=like-stack-client-dock && heroku container:release web -a=like-stack-client-dock",
     "heroku-postbuild": "npm run build",
     "analyze:clean": "rimraf stats.json",
     "preanalyze": "npm run analyze:clean",
