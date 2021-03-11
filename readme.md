@@ -1,3 +1,6 @@
+
+![Diagram](https://user-images.githubusercontent.com/47756969/110864397-18294400-82d3-11eb-9a13-c9fed4d11362.jpg)
+
 ## Prerequirements:
 
 - terraform
