@@ -9,8 +9,6 @@ aws (sns, sqs, lambda, s3, dynamoDB), nodemailer
 terraform, localstack, docker, docker-compose
 - Deploy  
  managing cloud applications using Terraform and heroku
-- Demo  
-https://like-stack-client-dock.herokuapp.com/
 
 ![110864397-18294400-82d3-11eb-9a13-c9fed4d11362](https://user-images.githubusercontent.com/47756969/114667688-739e8580-9d08-11eb-9c27-c04b7ed00ee5.jpg)
 
