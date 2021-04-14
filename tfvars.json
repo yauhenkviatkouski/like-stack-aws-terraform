@@ -1,5 +1,5 @@
 {
-  "SES_ACCESS_KEY": "lsapp.mail@gmail.com",
-  "SES_SECRET_KEY": "lsapptest",
+  "SES_ACCESS_KEY": "EMAIL_FOR_SENDING_@gmail.com",
+  "SES_SECRET_KEY": "EMAIL_PASS",
   "SUBSCRIBERS_DB_TABLE_NAME": "subscribers_db"
 }
